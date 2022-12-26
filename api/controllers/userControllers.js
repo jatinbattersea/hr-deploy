@@ -3,39 +3,6 @@ const Employee = require("../models/employeeModel");
 const User = require("../models/userModel");
 const { Shift } = require("../models/shiftModel");
 
-//get a user
-// const getUser = asyncHandler(async (req, res) => {
-//     const userId = req.query.userId;
-//     const keyword = req.query.search
-//         ? {
-//             $or: [
-//                 { name: { $regex: req.query.search, $options: "i" } },
-//                 { email: { $regex: req.query.search, $options: "i" } },
-//             ],
-//         }
-//         : {};
-//     if (userId) {
-//         const user = await User.findById(userId);
-//         const { password, updatedAt, ...other } = user._doc;
-//         res.status(200).json(other);
-//     } else {
-//         const projection = {
-//             name: 1,
-//             email: 1,
-//             dob: 1,
-//             profileImage: 1,
-//             designation: 1,
-//             department: 1,
-//             location: 1,
-//             createdAt: 1,
-//             updatedAt: 1,
-//         };
-//         const users = await User.find(keyword, projection);
-//         (users.length !== 0) ? res.status(200).json(users) : res.status(200).json({"message": "No user Found !"});
-        
-//     }
-// });
-
 // Add Member
 const addMember = asyncHandler(async (req, res) => {
     const { name, email, phone, employeeID, password, doj, dob, designation, team, profileImage, address, bankName, accNo, ifsc, shiftName} = req.body;

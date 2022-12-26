@@ -16,7 +16,7 @@ const columns = [
   {
     field: "name",
     headerName: "Name",
-    flex: 0.6,
+    flex: 1,
   },
   {
     field: "employeeId",
@@ -27,6 +27,11 @@ const columns = [
     field: "date",
     headerName: "Date",
     type: "date",
+    flex: 1,
+  },
+  {
+    field: "day",
+    headerName: "Day",
     flex: 1,
   },
   {
@@ -41,10 +46,10 @@ const columns = [
   },
 ];
 
-const token = Cookies.get("userJwt");
+let token;
 
 const Tools = (props) => {
-
+  token = Cookies.get("userJwt");
   // ? Tool States
   const [values, setValues] = useState({
     month: '',
@@ -148,6 +153,7 @@ const Tools = (props) => {
               name: r.name,
               employeeId: r.employeeID,
               date: dateProperty,
+              day: r.schedule[dateProperty].day,
               timeIn: r.schedule[dateProperty].timeIn,
               timeOut: r.schedule[dateProperty].timeOut,
             };
@@ -210,7 +216,6 @@ const Tools = (props) => {
           Authorization: `Basic ${token}`,
         }
       });
-      console.log(shiftData.data)
       data.map((r) => {
         for (const dateProperty in r.schedule) {
           if (dateProperty != "_id") {
@@ -219,6 +224,7 @@ const Tools = (props) => {
               name: r.name,
               employeeId: r.employeeID,
               date: dateProperty,
+              day: r.schedule[dateProperty].day,
               timeIn: r.schedule[dateProperty].timeIn,
               timeOut: r.schedule[dateProperty].timeOut,
             };
@@ -527,6 +533,7 @@ const Attendence = () => {
                 name: r.name,
                 employeeId: r.employeeID,
                 date: dateProperty,
+                day: r.schedule[dateProperty].day,
                 timeIn: r.schedule[dateProperty].timeIn,
                 timeOut: r.schedule[dateProperty].timeOut,
               };
@@ -566,7 +573,7 @@ const Attendence = () => {
             mt: 3,
             ml: 1,
             position: 'absolute',
-            zIndex: 1000
+            zIndex: 100
           }}>
             <Tools setDataUpdated={setDataUpdated} setData={setData} setErrorMsg={setErrorMsg} />
           </Box>

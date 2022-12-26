@@ -5,9 +5,10 @@ import ProfileImage from '../Public/images/dummy-image.jpg';
 import PageTitle from '../Components/PageTitle';
 import Cookies from "js-cookie";
 
-const token = Cookies.get("userJwt");
 const SingleEmployee = () => {
-
+  
+  const token = Cookies.get("userJwt");
+  
   const [employee, setEmployee] = useState({});
 
   const { employeeID } = useParams();

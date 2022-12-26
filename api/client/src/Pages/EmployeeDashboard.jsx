@@ -15,6 +15,11 @@ const columns = [
     flex: 1,
   },
   {
+    field: "day",
+    headerName: "Day",
+    flex: 1,
+  },
+  {
     field: "timeIn",
     headerName: "Punch In",
     flex: 1,
@@ -36,14 +41,21 @@ const initialValues = {
     msg: "",
 }
 
-const token = Cookies.get("userJwt");
 
 const EmployeeDashboard = () => {
+
+  const token = Cookies.get("userJwt");
+  
   const { user } = useContext(AuthContext);
 
   const [rowdata, setData] = useState([]);
 
   const [values, setValues] = useState(initialValues);
+
+  const [upComingHoliday, setUpComingHoliday] = useState({
+    name: "",
+    date: "",
+  });
 
   // ? Setting values of year and month
   const handleInputChange = (e) => {
@@ -77,6 +89,7 @@ const EmployeeDashboard = () => {
               tempData = {
                 id: i,
                 date: dateProperty,
+                day: r.schedule[dateProperty].day,
                 timeIn: r.schedule[dateProperty].timeIn,
                 timeOut: r.schedule[dateProperty].timeOut,
                 shift: user._doc.shift,
@@ -122,10 +135,23 @@ const EmployeeDashboard = () => {
       } catch (error) {
         console.log(error);
       }
-    };
+    }
     getLateArrivals();
   }, []);
   
+  useEffect(() => {
+    const getUpComingHoliday = async () => {
+      const { data } = await axios.get("/api/holiday/up/awaited", {
+        headers: {
+          Authorization: `Basic ${token}`,
+        },
+      });
+
+      setUpComingHoliday(data);
+    };
+    getUpComingHoliday();
+  }, []);
+
   return (
     <main id="main" className="main">
       <PageTitle />
@@ -169,7 +195,7 @@ const EmployeeDashboard = () => {
             <div className="card info-card">
               <div className="card-body pb-0">
                 <h5 className="card-title mb-4">Upcoming Holidays</h5>
-                <p className="mb-2 mt-3">25 Dec 2022 - Christmas</p>
+                <p className="mb-2 mt-3">{`${upComingHoliday?.date} - ${upComingHoliday?.name}`}</p>
               </div>
             </div>
           </div>

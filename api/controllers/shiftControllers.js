@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const { Shift } = require("../models/shiftModel");
-const Attendence = require("../models/attendenceModel");
 const Employee = require("../models/employeeModel");
 
 //get shifts

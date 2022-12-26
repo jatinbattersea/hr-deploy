@@ -4,10 +4,12 @@ import swal from "sweetalert";
 import { AuthContext } from './../context/AuthContext';
 import ProfileImage from "./../Public/images/dummy-image.jpg";
 import Cookies from "js-cookie";
+import secureLocalStorage from "react-secure-storage";
 
-const token = Cookies.get("userJwt");
 
 const Profile = () => {
+
+  const token = Cookies.get("userJwt");
 
   const { user, dispatch } = useContext(AuthContext);
 
@@ -20,7 +22,7 @@ const Profile = () => {
 
   // console.log(user._doc)
 
-  const initialAdminValues = {
+  const initialProfileValues = {
     profileImage: user._doc.profileImage,
     name: user._doc.name,
     doj: user._doc.doj,
@@ -29,11 +31,14 @@ const Profile = () => {
     email: user._doc.email,
     dob: user._doc.dob,
     address: user._doc.address,
+    bankName: user._doc.bankName,
+    accNo: user._doc.accNo,
+    ifsc: user._doc.ifsc,
   };
 
   const file = useRef(null);
   const [passwordValues, setPasswordValues] = useState(initialPasswordValues);
-  const [adminValues, setAdminValues] = useState(initialAdminValues);
+  const [profileValues, setProfileValues] = useState(initialProfileValues);
 
   const [fileURL, setFileURL] = useState('');
 
@@ -50,10 +55,10 @@ const Profile = () => {
     });
   };
   
-  const handleInputAdminDetails = (e) => {
+  const handleInputProfileDetails = (e) => {
     const { name, value } = e.target;
-    setAdminValues({
-      ...adminValues,
+    setProfileValues({
+      ...profileValues,
       [name]: value,
     });
   };
@@ -103,10 +108,10 @@ const Profile = () => {
     }
   }
 
-  const handleChangeAdminDetails = async (event) => {
+  const handleChangeProfileDetails = async (event) => {
     event.preventDefault();
 
-    const userData = adminValues;
+    const userData = profileValues;
     if (file.current.value !== "") {
       const data = new FormData();
       const fileName = Date.now() + file.current.files[0]?.name;
@@ -137,7 +142,7 @@ const Profile = () => {
               icon: "success",
               button: "ok",
             });
-            setAdminValues(initialAdminValues);
+            setProfileValues(initialProfileValues);
             setFileURL("");
             file.current.value = null;
           }
@@ -148,15 +153,13 @@ const Profile = () => {
     }
     // ?? CONTINUEEE
     try {
-      const { data } = await axios.get(`api/user/${adminValues.employeeID}`, {
+      const { data } = await axios.get(`api/user/${profileValues.employeeID}`, {
         headers: {
           Authorization: `Basic ${token}`,
         },
       });
-      const { $__, $isNew, accessToken, authorizedPages } = JSON.parse(
-        localStorage.getItem("user")
-      );
-      setAdminValues({
+      const { $__, $isNew, accessToken, authorizedPages } = secureLocalStorage.getItem("user");
+      setProfileValues({
         profileImage: data.profileImage,
         name: data.name,
         doj: data.doj,
@@ -165,16 +168,19 @@ const Profile = () => {
         email: data.email,
         dob: data.dob,
         address: data.address,
-      })
+        bankName: data.bankName,
+        accNo: data.accNo,
+        ifsc: data.ifsc,
+      });
       dispatch({
         type: "LOGIN_SUCCESS",
         payload: { $__, $isNew, accessToken, authorizedPages, _doc: data },
       });
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
   }
+  
 
   return (
     <main id="main" className="main">
@@ -269,7 +275,7 @@ const Profile = () => {
                     className="tab-pane fade profile-edit pt-3"
                     id="profile-edit"
                   >
-                    <form onSubmit={handleChangeAdminDetails}>
+                    <form onSubmit={handleChangeProfileDetails}>
                       <div className="row mb-3">
                         <label
                           htmlFor="profileImage"
@@ -281,9 +287,9 @@ const Profile = () => {
                           <img
                             id="frame"
                             src={
-                              adminValues.profileImage != ""
+                              profileValues.profileImage != ""
                                 ? process.env.REACT_APP_PUBLIC_PATH +
-                                  adminValues.profileImage
+                                  profileValues.profileImage
                                 : fileURL && URL.createObjectURL(fileURL)
                             }
                             className="img-fluid"
@@ -299,8 +305,8 @@ const Profile = () => {
                               ref={file}
                               onChange={(event) => {
                                 setFileURL(event.target.files[0]);
-                                setAdminValues({
-                                  ...adminValues,
+                                setProfileValues({
+                                  ...profileValues,
                                   profileImage: "",
                                 });
                               }}
@@ -330,8 +336,8 @@ const Profile = () => {
                             type="text"
                             className="form-control"
                             id="fullName"
-                            value={adminValues.name}
-                            onChange={handleInputAdminDetails}
+                            value={profileValues.name}
+                            onChange={handleInputProfileDetails}
                             required
                           />
                         </div>
@@ -349,8 +355,8 @@ const Profile = () => {
                             name="doj"
                             type="date"
                             className="form-control"
-                            value={adminValues.doj}
-                            onChange={handleInputAdminDetails}
+                            value={profileValues.doj}
+                            onChange={handleInputProfileDetails}
                             required=""
                           />
                         </div>
@@ -369,8 +375,8 @@ const Profile = () => {
                             type="text"
                             className="form-control"
                             id="employeeID"
-                            value={adminValues.employeeID}
-                            onChange={handleInputAdminDetails}
+                            value={profileValues.employeeID}
+                            onChange={handleInputProfileDetails}
                           />
                         </div>
                       </div>
@@ -388,8 +394,8 @@ const Profile = () => {
                             type="text"
                             className="form-control"
                             id="Phone"
-                            value={adminValues.phone}
-                            onChange={handleInputAdminDetails}
+                            value={profileValues.phone}
+                            onChange={handleInputProfileDetails}
                           />
                         </div>
                       </div>
@@ -407,8 +413,8 @@ const Profile = () => {
                             type="email"
                             className="form-control"
                             id="Email"
-                            value={adminValues.email}
-                            onChange={handleInputAdminDetails}
+                            value={profileValues.email}
+                            onChange={handleInputProfileDetails}
                           />
                         </div>
                       </div>
@@ -422,8 +428,8 @@ const Profile = () => {
                             name="dob"
                             type="date"
                             className="form-control"
-                            value={adminValues.dob}
-                            onChange={handleInputAdminDetails}
+                            value={profileValues.dob}
+                            onChange={handleInputProfileDetails}
                             required=""
                           />
                         </div>
@@ -441,17 +447,71 @@ const Profile = () => {
                             type="text"
                             className="form-control"
                             id="Address"
-                            value={adminValues.address}
-                            onChange={handleInputAdminDetails}
+                            value={profileValues.address}
+                            onChange={handleInputProfileDetails}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="row mb-3">
+                        <label
+                          htmlFor="Address"
+                          className="col-md-4 col-lg-3 col-form-label"
+                        >
+                          Bank Name
+                        </label>
+                        <div className="col-md-8 col-lg-9">
+                          <input
+                            name="bankName"
+                            type="text"
+                            className="form-control"
+                            id="bankName"
+                            value={profileValues.bankName}
+                            onChange={handleInputProfileDetails}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="row mb-3">
+                        <label
+                          htmlFor="Address"
+                          className="col-md-4 col-lg-3 col-form-label"
+                        >
+                          Bank Account No
+                        </label>
+                        <div className="col-md-8 col-lg-9">
+                          <input
+                            name="accNo"
+                            type="text"
+                            className="form-control"
+                            id="accNo"
+                            value={profileValues.accNo}
+                            onChange={handleInputProfileDetails}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="row mb-3">
+                        <label
+                          htmlFor="Address"
+                          className="col-md-4 col-lg-3 col-form-label"
+                        >
+                          IFSC Code
+                        </label>
+                        <div className="col-md-8 col-lg-9">
+                          <input
+                            name="ifsc"
+                            type="text"
+                            className="form-control"
+                            id="ifsc"
+                            value={profileValues.ifsc}
+                            onChange={handleInputProfileDetails}
                           />
                         </div>
                       </div>
 
                       <div className="my-4">
-                        <button
-                          type="submit"
-                          className="btn btn-primary"
-                        >
+                        <button type="submit" className="btn btn-primary">
                           Save Changes
                         </button>
                       </div>

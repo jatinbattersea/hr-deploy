@@ -59,7 +59,8 @@ const addAttendence = asyncHandler(async (req, res, next) => {
                         tempData.map((d) => {
                             schedule[d.date] = {
                                 timeIn: d["time-in"],
-                                timeOut: d["time-out"]
+                                timeOut: d["time-out"],
+                                day: d["day"],
                             }
                         });
 

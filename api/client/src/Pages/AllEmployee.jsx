@@ -23,9 +23,9 @@ const initialValues = {
   shift: '',
 };
 
-const token = Cookies.get("userJwt");
-
 const AllEmployee = () => {
+
+  const token = Cookies.get("userJwt");
 
   const [employees, setEmployees] = useState([]);
 

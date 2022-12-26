@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { AuthContext } from '../context/AuthContext';
 import ProfileImage from './../Public/images/dummy-image.jpg';
-
+import secureLocalStorage from "react-secure-storage";
 const TopNavbar = (props) => {
 
     const navigate = useNavigate();
@@ -18,6 +18,7 @@ const TopNavbar = (props) => {
     const handleLogout = (event) => {
         event.preventDefault();
         Cookies.remove('userJwt', { path: '/' }) // removed!
+        secureLocalStorage.clear();
         navigate('/accounts/login', { replace: true });
     }
 

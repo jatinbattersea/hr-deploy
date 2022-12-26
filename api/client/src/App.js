@@ -25,7 +25,7 @@ const App = () => {
 
     // Routes
     const paths = {
-        "": (user?._doc.designation == "Admin" ? <Dashboard /> : <EmployeeDashboard />),
+        "": (user?._doc.designation.toUpperCase() === "ADMIN" ? <Dashboard /> : <EmployeeDashboard />),
         "employees": <AllEmployee />,
         "employee": <SingleEmployee />,
         "add-member": <AddMember />,

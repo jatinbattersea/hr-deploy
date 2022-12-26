@@ -17,9 +17,10 @@ const initialEditValues = {
   editEndTime: "",
 };
 
-const token = Cookies.get("userJwt");
 
 const AddShift = () => {
+  
+  const token = Cookies.get("userJwt");
 
   const [values, setValues] = useState(initialValues);
 

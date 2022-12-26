@@ -3,13 +3,7 @@ import PageTitle from '../Components/PageTitle';
 import axios from 'axios';
 
 const Dashboard = () => {
-
-  const [companyDetails, setCompanyDetails] = useState({
-    foundedAt: '',
-    totalEmployees: '',
-    totalTeams: '',
-  });
-
+  
   return (
     <>
       <main id="main" className="main">

@@ -14,7 +14,7 @@ const loginUser = asyncHandler(async (req, res) => {
         });
         const match = (req.body.password === employee.password);
         // console.log(match);
-        if (!match) return res.status(400).json({ msg: "Invalid Credentials" });
+        if (!match) return res.status(400).json("Invalid Credentials");
         const userId = employee._id;
         const name = employee.name;
         const email = employee.email;
@@ -24,7 +24,7 @@ const loginUser = asyncHandler(async (req, res) => {
         res.cookie('userJwt', accessToken, { expires: new Date(Date.now() + 25892000000) });
         res.json({ ...employee, authorizedPages: user.authorizedPages, accessToken });
     } catch (error) {
-        res.status(404).json({ msg: "User not found" });
+        res.status(404).json("User not found");
     }
 })
 

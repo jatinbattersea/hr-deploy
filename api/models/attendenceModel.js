@@ -6,6 +6,9 @@ const DateSchema = mongoose.Schema(
         },
         timeOut: {
             type: String,
+        },
+        day: {
+            type: String,
         }
     }
 );
@@ -59,6 +62,7 @@ module.exports = Attendence;
 //         "dd/mm/yyyy": {
 //             timeIn: "HH: MM: SS AM/ PM",
 //             timeOut: "HH: MM:SS AM / PM"
+//             day: "Mon",
 //         },
 //         ...
 //      }

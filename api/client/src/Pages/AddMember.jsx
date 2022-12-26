@@ -22,10 +22,11 @@ const initialValues = {
     shiftName: '',
 };
   
-const token = Cookies.get("userJwt");
 
 const AddMember = () => {
-
+  
+  const token = Cookies.get("userJwt"); 
+  
   const [values, setValues] = useState(initialValues);
 
   const [shifts, setShifts] = useState([]);
